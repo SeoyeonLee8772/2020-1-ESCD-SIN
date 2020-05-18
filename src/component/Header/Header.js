@@ -7,7 +7,8 @@ function Header(props) {
     return (
         <HeaderWarapper className="navbar navbar-expand-lg px-sm-5">
             <Link to="/">
-                <img src="https://media-exp1.licdn.com/dms/image/C4E0BAQHMfiIlfjYpkQ/company-logo_200_200/0?e=2159024400&v=beta&t=rNdA57yGa_S9fw81aTbRbLMdvmVOcTfdwQ4aeKfVL2c" />
+                <img src="https://media-exp1.licdn.com/dms/image/C4E0BAQHMfiIlfjYpkQ/company-logo_200_200/0?e=2159024400&v=beta&t=rNdA57yGa_S9fw81aTbRbLMdvmVOcTfdwQ4aeKfVL2c" 
+                />
             </Link>
             <ul className="navbar-nav align-items-center">
                 <li className="nav-item ml-5">
@@ -55,6 +56,10 @@ Header.propTypes = {
 const HeaderWarapper = styled.div`
     background: var(--mainBlue);
     height: 150px;
+    img{
+        width: 150px;
+        height: 150px;
+    }
     a{
         color: var(--mainWhite)
     }
