@@ -33,6 +33,8 @@ from sklearn.mixture import GaussianMixture
 
 from watson_developer_cloud import SpeechToTextV1
 
+from flask_cors import CORS
+
 
 # Note: Is there a better way to do this?
 # This is the file where the credentials are stored
@@ -56,11 +58,7 @@ filename = ""
 filename_wav = ""
 
 app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    print('Hello get')
-    return 'Hello, World!'
+CORS(app)
 
 
 @app.route('/home')
@@ -74,7 +72,6 @@ def enroll():
     global user_directory
 
     if request.method == 'POST':
-        print("aa")
         data = request.get_json()
 
         username = data['username']
