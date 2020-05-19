@@ -13,6 +13,7 @@ Header.propTypes = {
 
 }
 const headerWarapper = styled.div`
+    
 `
 export default Header
 

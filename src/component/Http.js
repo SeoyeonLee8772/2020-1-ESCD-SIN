@@ -18,7 +18,7 @@ class Http{
     errorHandler = (error) => {
         if(error.response){
             let status = error.response.status;
-            if(status === 401)
+            if(status === 400 ||  status === 401 || status === 402 || status === 500)
                 document.location = '/'
         }
         return Promise.reject(error);

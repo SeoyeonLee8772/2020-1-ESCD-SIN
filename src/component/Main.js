@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Http from './Http'
+import MyComponent from './MyComponent'
 
 export default class Main extends Component {
     static propTypes = {
@@ -18,7 +19,7 @@ export default class Main extends Component {
                         <img  id="maintenance-gif" class="banner-graphic animation" src="images/maintenance-animation-trim.gif"></img>
 					</div>      
                     <div className="text-center">
-                        Something
+                        <MyComponent />
                     </div>
                 </div>
             </div>
