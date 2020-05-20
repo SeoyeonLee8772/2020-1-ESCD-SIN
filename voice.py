@@ -154,10 +154,10 @@ def vad():
         with background_noise as source:
             speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
 
-        print("Voice activity detection complete ...")
+        print("Voice activity detection complete ...Post")
 
-        random_words = RandomWords().random_words(count=5)
-        print(random_words)
+        #random_words = RandomWords().random_words(count=5)
+        #print(random_words)
         random_words = ["hello","hi"]
         return "  ".join(random_words)
 
@@ -167,7 +167,7 @@ def vad():
         with background_noise as source:
             speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
 
-        print("Voice activity detection complete ...")
+        print("Voice activity detection complete ...Get")
 
         random_words = RandomWords().random_words(count=5)
         random_words = ["hello","hi"]
@@ -176,6 +176,7 @@ def vad():
 
 
 @app.route('/voice', methods=['GET', 'POST'])
+#server 에서 /voice를 파약해서 여기 실행 시켜
 def voice():
     global user_directory
     global filename_wav
@@ -189,7 +190,7 @@ def voice():
 
         filename_wav = user_directory + "-".join(random_words) + '.wav'
         f = open(filename_wav, 'wb')
-        f.write(request.data)
+        f.write(request.data)#이게 soundBlob?응 맞아 
         f.close()
 
         with open(filename_wav, 'rb') as audio_file:
@@ -201,6 +202,8 @@ def voice():
         print("IBM Speech to Text thinks you said : " + recognised_words)
         print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words)))
         print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words)))       
+
+        print(run_quickstart(filename_wav))
 
         if fuzz.ratio(random_words, recognised_words) < 65:
             print(
@@ -384,6 +387,52 @@ def extract_features(rate, signal):
 
     return combined_features
 
+############################한국어 음성인식####################
+def run_quickstart(dir_location):
+    # [START speech_quickstart]
+    import io
+    import os
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:\\Users\\wnddk\\Downloads\\speech-to-text-api-277112-f2c7c16d8141.json"
 
+    # Imports the Google Cloud client library
+    # [START migration_import]
+    from google.cloud import speech
+    from google.cloud.speech import enums
+    from google.cloud.speech import types
+    # [END migration_import]
+
+    # Instantiates a client
+    # [START migration_client]
+    client = speech.SpeechClient()
+    # [END migration_client]
+
+    # The name of the audio file to transcribe
+    file_name = dir_location
+    #file_name = os.path.join(
+    #    os.path.dirname(__file__),
+    #    '.',
+    #    'file.wav')
+
+    # Loads the audio into memory
+    with io.open(file_name, 'rb') as audio_file:
+        content = audio_file.read()
+        audio = types.RecognitionAudio(content=content)
+
+    config = types.RecognitionConfig(
+        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=44100,
+        language_code='ko-KR',
+        audio_channel_count = 2,
+        )
+
+    # Detects speech in the audio file
+    response = client.recognize(config, audio)
+
+    for result in response.results:
+        #print('Transcript: {}'.format(result.alternatives[0].transcript))
+        resultString = '{}'.format(result.alternatives[0].transcript)
+        
+    # [END speech_quickstart]
+    return resultString
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=PORT, debug=True)
