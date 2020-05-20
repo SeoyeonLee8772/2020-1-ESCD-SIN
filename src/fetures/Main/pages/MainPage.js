@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Http from './Http'
-import MyComponent from './MyComponent'
-
-export default class Main extends Component {
+import WaveSurferContainer from '../../../component/WaveSurferContainer'
+export default class MainPage extends Component {
     static propTypes = {
         prop: PropTypes
     }
@@ -19,7 +17,7 @@ export default class Main extends Component {
                         <img  id="maintenance-gif" class="banner-graphic animation" src="images/maintenance-animation-trim.gif"></img>
 					</div>      
                     <div className="text-center">
-                        <MyComponent />
+                        <WaveSurferContainer />
                     </div>
                 </div>
             </div>

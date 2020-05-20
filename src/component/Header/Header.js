@@ -33,13 +33,13 @@ function Header(props) {
                 </li>
             </ul>
             <div className="ml-auto">
-                <Link to = "/cart" className="">
+                <Link to = "/join" className="">
                         <span className="mr-2">
                             <i className="fa fa-registered"/>
                         </span>
                         Join
                 </Link>
-                <Link to = "/cart" className="ml-2">
+                <Link to = "/login" className="ml-2">
                         <span className="mr-2">
                             <i className="fa fa-user"/>
                         </span>
