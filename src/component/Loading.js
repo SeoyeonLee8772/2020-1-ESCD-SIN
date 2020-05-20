@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import ReactLoading from 'react-loading'
 
 function Loading({type, color}) {
-    console.log('aaa')
     return (
         <LoadingBox>
             <ReactLoading type = {type} color = {color} height = {100} width = {100}/>

@@ -1,9 +1,9 @@
 import React from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import MicrophonePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.microphone.min.js';
-import p5 from 'p5';
-// import * as pSound from 'p5/lib/addons/p5.sound.js';
-// import * as p5DOM from 'p5/lib/addons/p5.dom'
+import "p5/lib/addons/p5.sound";
+import p5 from "p5";
+
 
 class WaveSurferContainer extends React.Component {
     constructor(props) {
@@ -11,6 +11,11 @@ class WaveSurferContainer extends React.Component {
         this.state = {
             playing: false,
         }
+        this.mic = new p5.AudioIn();
+        this.recorder = new p5.SoundRecorder();
+        this.soundFile = new p5.SoundFile();
+
+        this.recorder.setInput(this.mic);
     }
 
     componentDidMount(){
@@ -39,12 +44,22 @@ class WaveSurferContainer extends React.Component {
         let microphone = waveform.microphone; // you had the case wrong!
         microphone.start(); 
 
-        let mic = new p5();
-        console.log(mic)
+    
     }
 
     handlePlay = () => {
-        this.setState({ playing: !this.state.playing });
+        this.state = {
+            playing: !this.state.playing,
+        }
+        let { playing } = this.state;
+        if(playing){
+            this.mic.start();
+            this.recorder.record(this.soundFile)
+        }else{
+            this.mic.stop();
+            this.recorder.stop();
+            this.soundFile.play();
+        }
         // this.waveform.playPause();
     };
     render() {
@@ -52,7 +67,7 @@ class WaveSurferContainer extends React.Component {
         return (
             <div>        
                 <div id="waveform" />
-                <button onClick={this.handlePlay}>
+                <button onClick={() => this.handlePlay()}>
                 {!this.state.playing ? <i className="microphone icon"></i> :  <i className="microphone slash icon"></i>}
                 </button>
             </div>

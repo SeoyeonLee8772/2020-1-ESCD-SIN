@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Loading from '../../../../component/Loading'
-
 export default class Register extends Component {
     static propTypes = {
         prop: PropTypes
