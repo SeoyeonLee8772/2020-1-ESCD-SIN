@@ -79,6 +79,8 @@ URL = "URL"
  1. Authenticate an existing user
  
 
+## 프로젝트 설계 발표 링크
+https://youtu.be/eum-ErPIMT0 
 
 ## 팀원 
 2014112081 정세인
