@@ -1,4 +1,9 @@
 #!/uspeech_recognition/bin/env python3
+# -*- coding: utf-8 -*-
+from importlib import reload
+import sys
+reload(sys)
+# sys.setdefaultencoding('utf-8') //파이썬 버전3에서는 필요없음
 """
 This is a demo for a voice biometrics application
 """
@@ -56,6 +61,10 @@ filename = ""
 filename_wav = ""
 
 app = Flask(__name__)
+
+@app.route('/bank')
+def bank():
+    return render_template('bank.html')
 
 
 @app.route('/')
@@ -158,7 +167,9 @@ def vad():
 
         #random_words = RandomWords().random_words(count=5)
         #print(random_words)
-        random_words = ["hello","hi"]
+        #random_words = ["hello","hi"]
+        random_words = random_hangeul()
+        print(random_words)
         return "  ".join(random_words)
 
     else:
@@ -170,7 +181,8 @@ def vad():
         print("Voice activity detection complete ...Get")
 
         random_words = RandomWords().random_words(count=5)
-        random_words = ["hello","hi"]
+        #random_words = ["hello","hi"]
+        random_words = random_hangeul()
         print(random_words)
         return "  ".join(random_words)
 
@@ -192,27 +204,43 @@ def voice():
         f = open(filename_wav, 'wb')
         f.write(request.data)#이게 soundBlob?응 맞아 
         f.close()
-
-        with open(filename_wav, 'rb') as audio_file:
-            recognised_words = speech_to_text.recognize(audio_file, content_type='audio/wav').get_result()
-
-        recognised_words = str(recognised_words['results'][0]['alternatives'][0]['transcript'])
         
+        
+        ###########
+        #with open(filename_wav, 'rb') as audio_file:
+        #    recognised_words = speech_to_text.recognize(audio_file, content_type='audio/wav').get_result()
 
-        print("IBM Speech to Text thinks you said : " + recognised_words)
-        print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words)))
-        print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words)))       
+        #recognised_words = str(recognised_words['results'][0]['alternatives'][0]['transcript'])
+        naver_words = naver_STT(filename_wav)
+        print("naver STT : " + " ".join(naver_words))
+        #print("naver fuzzy partial score : " + str(fuzz.partial_ratio(random_words,naver_words)))
+        #print("naver Fuzzy score : " + str(fuzz.ratio(random_words, naver_words)))
+        print("\n")
 
-        print(run_quickstart(filename_wav))
+        google_words = run_quickstart(filename_wav)
+        print("Google STT : " + " ".join(google_words))
+        #print("Google Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, google_words)))
+        #print("Google Fuzzy score : " + str(fuzz.ratio(random_words, google_words)))       
 
-        if fuzz.ratio(random_words, recognised_words) < 65:
+        
+        naver_google = naver_words + google_words
+
+        if checkList(random_words,naver_google)  :
+            return "pass"
+        else :
             print(
                 "\nThe words you have spoken aren't entirely correct. Please try again ...")
             os.remove(filename_wav)
             return "fail"
-        else:
-            pass
-        return "pass"
+
+        #if fuzz.ratio(random_words, tmp) and fuzz.ratio(random_words, recognised_words) < 50:
+        #    print(
+        #        "\nThe words you have spoken aren't entirely correct. Please try again ...")
+        #    os.remove(filename_wav)
+        #    return "fail"
+        #else:
+        #    pass
+        #return "pass"
 
     else:
         return render_template('voice.html')
@@ -387,13 +415,14 @@ def extract_features(rate, signal):
 
     return combined_features
 
-############################한국어 음성인식####################
+################### 한국어 음성인식 ###################
+############### 음성인식된 string return ##############
 def run_quickstart(dir_location):
     # [START speech_quickstart]
     import io
     import os
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:\\Users\\wnddk\\Downloads\\speech-to-text-api-277112-f2c7c16d8141.json"
-
+    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:\\Users\\wnddk\\Downloads\\speech-to-text-api-277112-f2c7c16d8141.json"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/ubuntu/Downloads/commanding-fact-278208-0241c9b8b05e.json"
     # Imports the Google Cloud client library
     # [START migration_import]
     from google.cloud import speech
@@ -433,6 +462,75 @@ def run_quickstart(dir_location):
         resultString = '{}'.format(result.alternatives[0].transcript)
         
     # [END speech_quickstart]
-    return resultString
+    return resultString.split(' ')
+
+
+
+
+
+def random_hangeul():
+    import random as rand
+
+    randomText=["부채","튜브","바지","버스","보트","바나나","마스크","모래",
+                "무지개","개미","하마","모자","체리","포도","배","감","사과",
+                "브로콜리","완두콩","옥수수","버섯","장갑","목도리","딸기",
+                "귤","키위","수박","참외","파인애플","안녕하세요","반갑습니다",
+                "오징어","문어","책상","의자","기러기",
+                ]
+    
+    textString = []
+    for i in range (0,5):
+        textString.append(randomText[rand.randint(0,len(randomText)-1)])
+    
+    return textString
+
+#####################################################################
+#####################################################################
+def naver_STT(fileDir):
+    import json
+    import requests
+
+    data = open(fileDir,'rb') # STT를 진행하고자 하는 음성 파일
+
+    Lang = "Kor" # Kor / Jpn / Chn / Eng
+    URL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + Lang
+    
+    ID = "9q5chqjnfr" # 인증 정보의 Client ID
+    Secret = "EPxQOfPEu1AzOjnBZByLwFXcwd2fdgGPcCFxUF9h" # 인증 정보의 Client Secret
+    
+    headers = {
+        "Content-Type": "application/octet-stream", # Fix
+        "X-NCP-APIGW-API-KEY-ID": ID,
+        "X-NCP-APIGW-API-KEY": Secret,
+    }
+    response = requests.post(URL,  data=data, headers=headers)
+    rescode = response.status_code
+
+    if(rescode == 200):
+        temp_string = " "
+    else:
+        print("Error : " + response.text)
+
+    temp_string = response.text
+    temp_result = temp_string.split('\"')
+
+    return temp_result[3].split(' ')
+
+    #return " ".join(temp_result[3].split(' '))
+
+
+def checkList(random_data,recognized_data):
+    
+    count = 0
+    for i,elem in enumerate(random_data):
+        if elem in recognized_data:
+            count = count + 1
+    
+    if count > 2:
+        return True
+    else :
+        return False
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=PORT, debug=True)

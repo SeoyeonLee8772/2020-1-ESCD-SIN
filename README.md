@@ -1,8 +1,21 @@
-# 2020-1-ESCD-SIN
-기업사회맞춤형프로젝트1 SIN팀.
+# VoiceSens - Adding Voice Biometrics to your Application
 
-#### 프로젝트 주제
-사용자 음성을 활용한 서비스 사용자 인증 및 접근 제어 시스템 개발
+<b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
+
+<p align="center">
+ <img src="https://i.imgur.com/PQPkGYo.gif" align="middle">
+</p>
+
+## Table of Content
+
++ [Getting Started](#getting-started)
++ [Configuring the Application](#configuring-the-application) 
++ [Running VoiceSens locally](#running-locally)
++ [Demo Screenshots](#demo)
++ [Key Components](#built-with)
++ [References (Further Reading)](#references)
++ [Future Additions](#to-do)
+
 
 ## Getting Started
 
@@ -28,7 +41,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## Configuring the application
 
 
-1. Open the `config.py.text` file and change the username and password for the text to speech service. Then rename the file to `config.py` 
+1. Open the `sample_config.py` file and change the username and password for the text to speech service. Then rename the file to `config.py` 
 
 ```python
 APIKEY = "APIKEY"  
@@ -40,15 +53,40 @@ URL = "URL"
 1. Clone the repository. 
 
     ```
-    https://github.com/SeoyeonLee8772/2020-1-ESCD-SIN.git
+    git clone https://github.com/bedangSen/VoiceSens.git
     ```
     
 1. Move into the project directory. 
 
     ```
-    cd 2020-1-ESCD-SIN
+    cd VoiceSens
     ```
-	
+ 
+1. (Optional) Running it in a virtual environment. 
+
+   1. Downloading and installing _virtualenv_. 
+   ```
+   pip install virtualenv
+   ```
+   
+   2. Create the virtual environment in Python 3.
+   
+   ```
+    virtualenv -p path\to\your\python.exe test_env
+    ```    
+   
+   3. Activate the test environment.     
+   
+        1. For Windows:
+        ```
+        test_env\Scripts\Activate
+        ```        
+        
+        2. For Unix:
+        ```
+        source test_env/bin/activate
+        ```    
+
 1. Install all the required libraries, by installing the requirements.txt file.
 
     ```
@@ -79,12 +117,51 @@ URL = "URL"
  1. Authenticate an existing user
  
 
-## 프로젝트 설계 발표 링크
-https://youtu.be/eum-ErPIMT0 
+#### 2. Enrollment Page
 
-## 팀원 
-2014112081 정세인
-2017112153 응웬딩 흐엉
-2018112013 이서연
-2018112042 송승민
+<p align="center">
+ <a href="https://imgur.com/61CsyWO"><img src="https://i.imgur.com/61CsyWO.gif" title="source: imgur.com" /></a>
+</p>
 
+<br><br>
+
+If you haven't created a voice sample, the first step is to create an account and enroll your voice samples. The model then generates a voice print on the voice samples provided. 
+
+#### 3. Authentication Page
+
+<p align="center">
+ <a href="https://imgur.com/U3T3uVT"><img src="https://i.imgur.com/U3T3uVT.gif" title="source: imgur.com" /></a>
+</p>
+
+Once you have created an account, you can authenticate yourself by recording a voice sample, generating a voice print, and then comparing the voice print to the voice prints in the database
+
+#### 4. Voice Biometrics Page
+
+<p align="center">
+ <a href="https://imgur.com/eVDHeSE"><img src="https://i.imgur.com/eVDHeSE.gif" title="source: imgur.com" /></a>
+</p>
+
+When you record your voice sample, the first thing you do is record the environmental sound. This creates a baseline for noise in the following recording, increasing the accuracy of your results. Once you are done with that you can proceed with reciting the randomly generated words. If the fuzzy matching ratio between the generated words and recognised words is less than 65, the recorded voice phrase will not be accepted, and you will be asked to record your voice sample again. 
+
+## Key Components
+
+* [IBM Watson Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) - The Speech to Text Service used. 
+* [Scipy](https://www.scipy.org/) - SciPy is a Python-based ecosystem of open-source software for mathematics, science, and engineering. 
+* [Speech Recognition](https://pypi.org/project/SpeechRecognition/) -  Library for performing speech recognition, with support for several engines and APIs, online and offline.
+* [Python Speech Features](https://python-speech-features.readthedocs.io/en/latest/) - This library provides common speech features for ASR including MFCCs and filterbank energies. 
+* [Fuzzy Wuzzy](https://github.com/seatgeek/fuzzywuzzy) - Fuzzy string matching like a boss. It uses Levenshtein Distance to calculate the differences between sequences in a simple-to-use package. 
+* [Random Words](https://pypi.org/project/random-word/) - This is a simple python package to generate random english words. 
+* [Skitlearn Gaussian Mixture Models](https://scikit-learn.org/stable/modules/mixture.html) - sklearn.mixture is a package which enables one to learn Gaussian Mixture Models
+
+## References
+
+* [Digital Signal Processing : Speeker Recognition Final Report](https://raw.githubusercontent.com/ppwwyyxxspeaker-recognition/master/doc/Final-Report-Complete.pdf)
+* [MFCC](http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/)
+* [Speech Recognition with Python](https://realpython.com/python-speech-recognition/)
+
+## To Do
+
+* Hashing the audio files and signing it with the clients private key, to prevent man in the middle attacks. 
+* Improve the accuracy of the GMM model. 
+* Add solution architecture.
+* Storing the models in a secure Object storage

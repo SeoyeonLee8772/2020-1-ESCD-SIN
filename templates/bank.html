@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- bootstrap styles -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <!-- custom styles -->
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/bank.css?ver=1" />
+    <!-- jQuery -->
+    <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <!-- bootstrap js -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    
+    
+
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default" id="page-header">
+            <div class="panel-body" id="page-title">
+              <h1 class="text-center" id="title">SIN Bank System !</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div id="bank" class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center lead">Bank Account:</div>
+              <div class="panel-body">
+
+                <!--<form id="add-account">
+                  <div class="form-group">
+                    <label for="name">Ditt Namn:</label>
+                    <input type="text" name="name" id="name" class="form-control" autofocus required>
+                  </div>
+                  <div class="form-group">
+                    <label for="initial-deposit">Första insättning</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">CHF</div>
+                      <input type="number" min="0" name="initial-deposit" id="initial-deposit" class="form-control" required>
+                      <div class="input-group-addon">.00</div>
+                    </div>
+                  </div>-->
+                <form id="add-account">
+                    <!--<div class="form-group">
+                      <label for="name">Ditt Namn:</label>
+                      <input type="text" name="name" id="name" class="form-control" autofocus required>
+                    </div>-->
+                  <div class="form-group">
+                    <label for="initial-deposit">Initial deposit</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">WON</div>
+                      <input type="number" min="0" name="initial-deposit" id="initial-deposit" class="form-control" autofocus required>
+                      <div class="input-group-addon">.00</div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">확인!</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+        <div id="account" class="col-md-6 col-md-offset-3">
+
+          <div class="panel panel-default">
+            <div class="panel-heading text-center lead">Your Account
+              <div id="balance"></div>
+            </div>
+            <div class="panel-body">
+              <form id="deposit">
+                <div class="form-group">
+                  <label for="deposit-amount">Deposit:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">WON</div>
+                    <input type="number" min="0" name="deposit-amount" id="deposit-amount" class="form-control" required>
+                    <div class="input-group-addon">.00</div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-success">Deposit!</button>
+              </form>
+
+              <br>
+
+              <form id="withdraw">
+                <div class="form-group">
+                  <label for="withdrawl-amount">Withdraw:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">WON</div>
+                    <input type="number" min="0" name="withdrawal-amount" id="withdrawal-amount" class="form-control" required>
+                    <div class="input-group-addon">.00</div>
+                  </div>
+                </div>
+                <div id="no-button">
+                  <fieldset disabled>
+                    <button type="submit" class="btn btn-danger">Withdraw!</button>
+                  </fieldset>
+                </div>
+                <div id="go-button">
+                  <button type="submit" class="btn btn-danger">Withdraw!</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel panel-info" id="history-panel">
+            <div class="panel-heading text-center lead" id="history-header">Account History</div>
+            <table class="table table-striped" id="history">
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Balance</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+  <!-- Custom Scripts -->
+  <script src="../static/javascript/bank.js?ver=1"></script>
+</html>
